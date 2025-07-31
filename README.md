@@ -74,6 +74,6 @@ FinTrack/
 ## 🧑‍💻 Author
 Abhishek Bochare
 🔗 LinkedIn
-📧 abhishekbochare@gmail.com
+📧 abhishekbochare2003@gmail.com
 
 ---
