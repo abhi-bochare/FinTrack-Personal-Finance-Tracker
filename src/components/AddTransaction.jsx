@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ref, push, set } from "firebase/database";
 import { db } from "../firebase";
@@ -26,6 +26,12 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
       date: new Date().toISOString().split("T")[0],
     }
   );
+
+  useEffect(() => {
+    if (existingTxn) {
+      setForm(existingTxn);
+    }
+  }, [existingTxn]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -73,7 +79,7 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
       title: "",
       amount: "",
       type: "income",
-      category: "food",
+      category: "Food",
       date: new Date().toISOString().split("T")[0],
     });
   };
@@ -81,10 +87,12 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-lg font-semibold mb-4">Add New Transaction</h2>
-        <form onSubmit={handleSubmit} className="space-y-3">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+      <div className="bg-gray-900 text-white p-6 rounded-lg shadow-xl w-full max-w-md">
+        <h2 className="text-xl font-semibold mb-5 text-blue-400">
+          {existingTxn ? "Edit Transaction" : "Add New Transaction"}
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             ref={titleRef}
             name="title"
@@ -92,7 +100,7 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
             placeholder="Title"
             value={form.title}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
             autoFocus
             required
           />
@@ -102,14 +110,14 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
             placeholder="Amount"
             value={form.amount}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
             required
           />
           <select
             name="type"
             value={form.type}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
             required
           >
             <option value="income">Income (+)</option>
@@ -119,7 +127,7 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
             name="category"
             value={form.category}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
             required
           >
             {categories.map((cat) => (
@@ -133,22 +141,22 @@ const AddTransaction = ({ isOpen, onClose, existingTxn = null }) => {
             type="date"
             value={form.date}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
             required
           />
-          <div className="flex justify-end gap-2 mt-4">
+          <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border rounded hover:bg-gray-100"
+              className="px-4 py-2 border border-gray-500 text-gray-300 rounded hover:bg-gray-700 transition"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
-              Add
+              {existingTxn ? "Update" : "Add"}
             </button>
           </div>
         </form>
