@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import React, { useState, useEffect } from "react";
 import { auth } from "../firebase";
 import { clearUser } from "../redux/authSlice";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import AddTransaction from "../components/AddTransaction";
 import { ref, db, onValue } from "../firebase";
@@ -53,7 +53,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await signOut(auth);
-    dispatch(clearUser);
+    dispatch(clearUser());
     navigate("/login");
   };
 
@@ -65,25 +65,30 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">FinTrack Dashboard</h1>
+    <div className="min-h-screen bg-gray-900 text-gray-100 p-6">
+      <header className="flex justify-between items-center mb-8 border-b border-gray-700 pb-4">
+        <h1 className="text-3xl font-extrabold text-blue-400">
+          💰 FinTrack Dashboard
+        </h1>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
         >
           Logout
         </button>
       </header>
+
       <Summary transactions={transactions} />
-      <div className="flex justify-start mb-4 ml-3">
+
+      <div className="flex justify-start mb-6">
         <button
           onClick={() => setOpen(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
           ➕ Add Transaction
         </button>
       </div>
+
       <AddTransaction
         isOpen={isOpen}
         onClose={() => {
@@ -93,11 +98,11 @@ const Dashboard = () => {
         existingTxn={editTxn}
       />
 
-      <div className="flex flex-wrap gap-4 items-center mb-4 ml-3">
+      <div className="flex flex-wrap gap-4 items-center mb-6">
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="p-2 border rounded"
+          className="p-2 bg-gray-800 text-white border border-gray-600 rounded"
         >
           <option value="all">All Types</option>
           <option value="income">Income</option>
@@ -107,7 +112,7 @@ const Dashboard = () => {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="p-2 border rounded"
+          className="p-2 bg-gray-800 text-white border border-gray-600 rounded"
         >
           <option value="all">All Categories</option>
           {Array.from(new Set(transactions.map((txn) => txn.category))).map(
@@ -122,7 +127,7 @@ const Dashboard = () => {
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
-          className="p-2 border rounded"
+          className="p-2 bg-gray-800 text-white border border-gray-600 rounded"
         >
           <option value="newest">Date: Newest First</option>
           <option value="oldest">Date: Oldest First</option>
